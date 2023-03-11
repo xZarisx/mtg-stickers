@@ -1,17 +1,8 @@
 import styled from 'styled-components';
+import { Sticker } from './sticker';
 
 const Wrapper = styled.div`
   position: relative;
-`;
-
-const Sticker = styled.div`
-  background: ${({ src, xCord, yCord }) =>
-    `url(${src}) -${xCord}px -${yCord}px`};
-  width: ${({ width }) => width};
-  height: ${({ height }) => height};
-  position: absolute;
-  top: ${({ yCord }) => yCord}px;
-  left: ${({ xCord }) => xCord}px;
 `;
 
 export const StickerCard = ({ src, clipMaps = [] }) => {
@@ -20,7 +11,14 @@ export const StickerCard = ({ src, clipMaps = [] }) => {
     <Wrapper>
       <img src={src} />
       {clipMaps.map((clipMap) => (
-        <Sticker src={src} {...clipMap} />
+        <Sticker
+          src={src}
+          {...clipMap}
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.setData('text', JSON.stringify({ src, clipMap }));
+          }}
+        />
       ))}
     </Wrapper>
   );
